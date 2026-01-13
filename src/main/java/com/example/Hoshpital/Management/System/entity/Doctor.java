@@ -30,6 +30,10 @@ public class Doctor {
     @Column(nullable = false, unique = true, length = 100)
     private String email;
 
+    @OneToOne
+    @MapsId
+    private User user;
+
     @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Appointment> appointments = new ArrayList<>();
 

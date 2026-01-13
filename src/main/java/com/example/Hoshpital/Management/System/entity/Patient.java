@@ -35,6 +35,10 @@ public class Patient {
 
     private String gender;
 
+    @OneToOne
+    @MapsId
+    private User user;
+
     @Column(nullable = false, unique = true)
     private String email;
     private LocalDate birthDate;

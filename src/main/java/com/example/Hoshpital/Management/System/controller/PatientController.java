@@ -27,9 +27,9 @@ public class PatientController {
         return ResponseEntity.ok(patientService.getPatientById(id));
     }
 
-    @PostMapping("/patient")
-    public ResponseEntity<PatientDto> addPatientData(@RequestBody PatientDto patientDto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(patientService.addPatientData(patientDto));
+    @PostMapping("/patient/{userId}")
+    public ResponseEntity<PatientDto> addPatientData(@PathVariable Long userId, @RequestBody PatientDto patientDto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(patientService.addPatientData(patientDto, userId));
     }
 
     @PutMapping("/patient/{id}")
@@ -37,11 +37,7 @@ public class PatientController {
         return ResponseEntity.ok(patientService.updatePatientData(id, patientDto));
     }
 
-    @DeleteMapping("/patient/{id}")
-    public ResponseEntity<Void> deleteDataById(@PathVariable Long id) {
-        patientService.deletePatientData(id);
-        return ResponseEntity.noContent().build();
-    }
+
 
     @PatchMapping("/patient/{id}")
     public ResponseEntity<PatientDto> partialUpdateData(@PathVariable Long id, @RequestBody Map<String, Object> updates) {

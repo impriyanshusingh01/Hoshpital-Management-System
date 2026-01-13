@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.example.Hoshpital.Management.System.entity.User;
 import com.example.Hoshpital.Management.System.entity.type.BloodGroupType;
+import com.example.Hoshpital.Management.System.repository.AuthRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 public class PatientServiceImpl implements PatientService {
 
     private final PatientRepository patientRepository;
+    private final AuthRepository authRepository;
 
     @Override
     public List<PatientDto> getAllPatient() {
@@ -56,8 +59,12 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public PatientDto addPatientData(PatientDto patientDto) {
+    public PatientDto addPatientData(PatientDto patientDto, Long userId) {
+
+        User user = authRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("user id not found " + userId));
+
         Patient patient = new Patient();
+        patient.setUser(user);
         patient.setName(patientDto.getName());
         patient.setAge(patientDto.getAge());
         patient.setEmail(patientDto.getEmail());
@@ -117,24 +124,30 @@ public class PatientServiceImpl implements PatientService {
             String key = e.getKey();
             Object value = e.getValue();
             switch (key) {
-                case "name": patient.setName((String) value);
-                break;
-                case "email": patient.setEmail((String) value);
-                break;
-                case "gender": patient.setGender((String) value);
-                break;
-                case "birthDate": patient.setBirthDate(LocalDate.parse((String) value));
-                break;
-                case "age" : patient.setAge((String) value);
-                break;
-                case "bloodGroupType": patient.setBloodGroupType(BloodGroupType.valueOf((String) value));
-                break;
+                case "name":
+                    patient.setName((String) value);
+                    break;
+                case "email":
+                    patient.setEmail((String) value);
+                    break;
+                case "gender":
+                    patient.setGender((String) value);
+                    break;
+                case "birthDate":
+                    patient.setBirthDate(LocalDate.parse((String) value));
+                    break;
+                case "age":
+                    patient.setAge((String) value);
+                    break;
+                case "bloodGroupType":
+                    patient.setBloodGroupType(BloodGroupType.valueOf((String) value));
+                    break;
                 default:
                     throw new IllegalArgumentException("data not exist");
             }
         }
         Patient patient1 = patientRepository.save(patient);
-        return new PatientDto( patient1.getId(),
+        return new PatientDto(patient1.getId(),
                 patient1.getName(),
                 patient1.getAge(),
                 patient1.getGender(),

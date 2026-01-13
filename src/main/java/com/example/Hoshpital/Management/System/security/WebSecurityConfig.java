@@ -1,5 +1,6 @@
 package com.example.Hoshpital.Management.System.security;
 
+import com.example.Hoshpital.Management.System.entity.type.RoleType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -23,8 +24,11 @@ public class WebSecurityConfig {
                 .sessionManagement(sessionManagement->
                        sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS) )
                 .authorizeHttpRequests(auth-> auth
-                        .requestMatchers("/api/**").permitAll()
+//                        .requestMatchers("/api/**").hasRole("PATIENT")
                         .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/**").hasAnyRole("DOCTOR","PATIENT")
+
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
