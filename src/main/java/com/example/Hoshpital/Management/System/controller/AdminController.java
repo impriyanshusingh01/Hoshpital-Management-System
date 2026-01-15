@@ -5,7 +5,7 @@ import com.example.Hoshpital.Management.System.service.AdminService;
 import com.example.Hoshpital.Management.System.service.PatientService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
+
 import org.springframework.web.bind.annotation.*;
 
 @RestController
